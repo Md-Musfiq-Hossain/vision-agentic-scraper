@@ -1,8 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException  
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from app.browser.automation import VisionBrowser
-
+from app.schemas.coordinate import ScrapeRequest  
 
 app = FastAPI(title="Vision-Agentic Scraper - Agent Core")
 
@@ -14,9 +13,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class ScrapeRequest(BaseModel):
-    url: str
-
 @app.get("/")
 async def health_check():
     return {"status": "ok", "service": "Vision-Agentic Scraper - backend-agent"}
@@ -24,10 +20,9 @@ async def health_check():
 @app.post("/api/v1/ingest")
 async def ingest_page_layout(payload: ScrapeRequest):
     browser_engine = VisionBrowser()
-    result = await browser_engine.capture_page_snapshot(payload.url)
+    result = await browser_engine.capture_page_snapshot(str(payload.url)) 
     
     if not result["success"]:
-        raise HTTPException(status_code=500, detail=result.get("error", "Unknown error occurred during page snapshot capture."))
+        raise HTTPException(status_code=500, detail=result.get("error", "Unknown error occurred."))
         
     return result
-    
