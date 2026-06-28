@@ -1,15 +1,13 @@
 import os
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Vision-Agentic Scraper - Agent Core"
-    API_V1_STR: str = "/api/v1"
-
-    DEFAULT_VIEWPORT_WIDTH: int = 1280
-    DEFAULT_VIEWPORT_HEIGHT: int = 720
-
-    class config:
-        env_file = ".env"
-        case_sensitive = True
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
+    GITHUB_TOKEN: str = os.getenv("GITHUB_TOKEN", "")
+    DEFAULT_VIEWPORT_WIDTH: int = int(os.getenv("DEFAULT_VIEWPORT_WIDTH", 1280))
+    DEFAULT_VIEWPORT_HEIGHT: int = int(os.getenv("DEFAULT_VIEWPORT_HEIGHT", 720))
 
 settings = Settings()

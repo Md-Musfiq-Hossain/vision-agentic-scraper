@@ -1,4 +1,6 @@
 from pydantic import BaseModel, HttpUrl
+from typing import Optional
 
 class ScrapeRequest(BaseModel):
-    url: HttpUrl  # Using HttpUrl ensures the user provides a real website link
+    url: HttpUrl
+    target_element: Optional[str] = None
